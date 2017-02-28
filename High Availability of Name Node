@@ -1,0 +1,37 @@
+High Availability in Hadoop:
+    There are two NameNodes in a Hadoop system in an active-standby a configuration. When the Active NameNode fails to perform the Standby NameNode
+    takes up the responsibilities of Active NameNode without interruption.
+    
+Automated Failover:
+    The Hadoop by default detects NameNode host and process failures and will automatically switches to the switch to the standby
+    NameNode to maintain the availability for the HDFS service. There is no need for human assistance in the process. 
+    
+Hot Standby:
+    Both Active and Standby NameNodes have up to date HDFS metadata, ensuring seamless failover even for large clusters- which means no downtime for HDP cluster.
+    
+Full Stack resiliency:
+    The entire Hadoop stack has been certified to handle a NameNode failure scenario without losing data or the job progress. 
+    
+Hadoop High Availability Architecture:    
+    If we look into the architecture, we can outline the different components that are built into HDP to privide this functionality.
+    In each cluster, two seperate machines are configured as NameNodes. In a working cluster, one of the Name Node machine is in Active State,
+    and the other is in the standby state.
+    
+        The Active Node is responsible for all client operations in the cluster. The Standby NameNode maintains enough state to provide a 
+    fast failover. In order for the Standby Node to keep its state synchronized with the Active Node. Both nodes communicate through a group of seperate daemons 
+    called Journal Nodes. The file system journal logged by the Active NameNode at the Journal is consumed by the Standby NameNode to keep its file system 
+    namespace in sync with the Active NameNode. 
+      
+        Data Nodes are configured with the locations of blocks in your cluster. DataNodes are configured with the location of both the NameNodes 
+        and send Block location information and heartbeats to both NameNode machines. 
+        
+    The need of Zookeeper kicks in now. 
+        The Zookeeper Failover Controller (ZKFC) is responsible for HA monitoring of the NameNode service and for
+        automatic failover when the Active NameNode is unavailable. There are two ZKFC processes. One on each Name Node machine.
+        ZKFC uses the Zookeeper Service for co-ordincation in determining which is the Active NwameNode and in determining when tho 
+        failover to the Standby NameNode.
+         
+        In Hadoop setup, the HDFS clients are configured with a logical name service URI and the two NameNodes corresponding to it.
+        The clients perform source side failover. When a client cannot connect to a NameNode or if the NameNode is in 
+        Standby mode, it performs fail over to the other NameNode.
+        
