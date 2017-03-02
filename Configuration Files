@@ -1,0 +1,5 @@
+The four files that need to be configured explicitly while setting up a single node hadoop cluster are:
+1.Core-site.xml
+2.HDFS.xml
+3.YARN-site.xml
+4.xml
